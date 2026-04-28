@@ -192,7 +192,7 @@ export const effects = [
     name: 'Process Orbit Steps',
     category: 'Interactive UI',
     description: 'Pasos de proceso que orbitan un núcleo central con animaciones de flotación desfasadas.',
-    Demo: Demos.ProcessOrbitDemo || Demos.ProcessSteps,
+    Demo: Demos.ProcessSteps,
     prompts: {
       react_tailwind: createPrompt(
         'Process Orbit Steps',
@@ -213,7 +213,7 @@ export const effects = [
     name: 'Services Layered Panels',
     category: 'UI Components',
     description: 'Paneles apilados con profundidad 3D, bordes de cristal y elevación en hover.',
-    Demo: Demos.ServicesLayerDemo || Demos.ServicesWithBlobs,
+    Demo: Demos.ServicesWithBlobs,
     prompts: {
       react_tailwind: createPrompt(
         'Services Layered Panels',
