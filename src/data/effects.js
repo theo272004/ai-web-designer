@@ -165,7 +165,7 @@ export const effects = [
         'vanilla_css'
       )
     }
-  }
+  },
   {
     slug: 'scroll-reveal-text',
     name: 'Scroll Reveal Text',
