@@ -45,7 +45,7 @@ export const effects = [
     name: 'Process Steps Animation',
     category: 'Interactive Grids',
     description: 'Tarjetas de pasos que aparecen en cascada con micro-interacciones al hacer hover.',
-    Demo: Demos.ProcessSteps,
+    Demo: Demos.KaivaStepsCarousel,
     prompts: {
       react_tailwind: createPrompt(
         'Process Steps Grid',
@@ -66,7 +66,7 @@ export const effects = [
     name: 'Interactive Service Blobs',
     category: 'Hover Effects',
     description: 'Tarjetas premium con orbes de luz dinámicos que reaccionan al cursor.',
-    Demo: Demos.ServicesWithBlobs,
+    Demo: Demos.KaivaServicesCards,
     prompts: {
       react_tailwind: createPrompt(
         'Interactive Service Blobs',
@@ -84,21 +84,21 @@ export const effects = [
   },
   {
     slug: 'tilt-portfolio',
-    name: '3D Tilt Slide Portfolio',
+    name: 'Services Switcher Showcase',
     category: 'Immersive UI',
-    description: 'Galería 3D con efecto de inclinación (tilt) y navegación fluida.',
+    description: 'Sección de servicios con tabs premium y previews distintas para web, diseño y automatización.',
     Demo: Demos.TiltSlidePortfolio,
     prompts: {
       react_tailwind: createPrompt(
-        '3D Tilt Slide Portfolio',
-        'Las tarjetas deben rotar en los ejes X e Y basándose en la posición del mouse. Usa useMotionValue y useSpring para suavizar el movimiento. Ángulo máximo de rotación: 8 grados.',
-        'Trigger: onMouseMove para calcular el offset desde el centro de la tarjeta. onClick para cambiar la tarjeta activa con una transición de spring (stiffness: 120, damping: 20).',
+        'Services Switcher Showcase',
+        'Diseña una sección de servicios con 3 tabs. Cada tab debe cambiar el panel principal con una transición suave (fade + translateY leve). La interfaz debe sentirse premium, con fondos diferenciados y previews distintas para cada servicio.',
+        'Usa estado local para cambiar entre Desarrollo Web, Diseño y Automatización. Anima el cambio de panel con AnimatePresence y motion.div. Mantén responsive y accesible.',
         'react_tailwind'
       ),
       vanilla_css: createPrompt(
-        '3D Tilt Slide Portfolio',
-        'Implementa el efecto tilt usando transform: perspective(1000px) rotateX() rotateY(). El cálculo de los grados debe hacerse en JS dividiendo la posición relativa del mouse entre el ancho/alto.',
-        'EventListener de mousemove en cada tarjeta. Usa requestAnimationFrame para asegurar que la rotación sea fluida a 60fps.',
+        'Services Switcher Showcase',
+        'Construye una sección con botones tipo tabs y un panel principal que cambia su contenido con opacidad, translateY y variación de layout. Cada servicio debe tener una preview visual distinta.',
+        'Usa event listeners click para activar cada tab y alternar clases CSS. Anima entrada y salida con transiciones de 400-600ms.',
         'vanilla_css'
       )
     }
@@ -228,6 +228,194 @@ export const effects = [
         'vanilla_css'
       )
     }
+  },
+  {
+    slug: 'aurora-mesh',
+    name: 'Aurora Mesh Background',
+    category: 'Background FX',
+    description: 'Capas de blobs con blur y malla sutil en movimiento para crear una atmósfera premium.',
+    Demo: Demos.AuroraMesh,
+    prompts: {
+      react_tailwind: createPrompt(
+        'Aurora Mesh Background',
+        'Crea 3 blobs radiales con blur(60px) y animación de escala + desplazamiento suave. Usa duraciones entre 8s y 10s, repeat infinito, easeInOut.',
+        'Incluye una malla con linear-gradients de 1px y opacidad baja. Añade un overlay para evitar saturación del color.',
+        'react_tailwind'
+      ),
+      vanilla_css: createPrompt(
+        'Aurora Mesh Background',
+        'Construye un contenedor con 3 capas absolutas tipo blob usando radial-gradient + filter: blur(60px). Anima con keyframes drift.',
+        'Agrega una capa de grid con background-size 44px 44px y opacidad baja. Mantén performance usando transform.',
+        'vanilla_css'
+      )
+    }
+  },
+  {
+    slug: 'floating-avatars',
+    name: 'Floating Avatars Orbit',
+    category: 'Motion UI',
+    description: 'Elementos flotantes alrededor de un núcleo central con desfases y órbitas visuales.',
+    Demo: Demos.FloatingAvatars,
+    prompts: {
+      react_tailwind: createPrompt(
+        'Floating Avatars Orbit',
+        'Crea 4 tarjetas pequeñas flotantes con animación y=[0,-14,0,10,0] y rotación leve. Usa delays distintos para evitar sincronía.',
+        'Añade un núcleo central y anillos de borde. El núcleo debe tener rotación continua lenta.',
+        'react_tailwind'
+      ),
+      vanilla_css: createPrompt(
+        'Floating Avatars Orbit',
+        'Genera 4 elementos absolutos con keyframes de flotación y ligera rotación. Usa animation-delay diferente por elemento.',
+        'Dibuja un núcleo central con gradiente y dos anillos con border semitransparente.',
+        'vanilla_css'
+      )
+    }
+  },
+  {
+    slug: 'stats-counter',
+    name: 'KPI Count-Up Cards',
+    category: 'Data Motion',
+    description: 'Tarjetas de métricas con contador animado al entrar en viewport.',
+    Demo: Demos.StatsCounter,
+    prompts: {
+      react_tailwind: createPrompt(
+        'KPI Count-Up Cards',
+        'Crea 3 tarjetas con valores numéricos animados desde 0 hasta su valor final usando spring suave.',
+        'El contador debe iniciar al entrar en viewport y soportar enteros/decimales.',
+        'react_tailwind'
+      ),
+      vanilla_css: createPrompt(
+        'KPI Count-Up Cards',
+        'Diseña 3 tarjetas limpias con sombra suave y tipografía fuerte para el número.',
+        'Implementa contador con requestAnimationFrame y easing para pasar de 0 al valor objetivo cuando la sección sea visible.',
+        'vanilla_css'
+      )
+    }
+  },
+  {
+    slug: 'magnetic-cta',
+    name: 'Magnetic CTA Button',
+    category: 'Micro Interactions',
+    description: 'Botón magnético que sigue el cursor con inercia y brillo barrido.',
+    Demo: Demos.MagneticButton,
+    prompts: {
+      react_tailwind: createPrompt(
+        'Magnetic CTA Button',
+        'Crea un botón con desplazamiento magnético en X/Y según la posición del mouse. Suaviza con spring (stiffness ~180, damping ~18).',
+        'Al salir del mouse, vuelve a 0,0. Agrega una capa de brillo que se desplace en loop con linear-gradient.',
+        'react_tailwind'
+      ),
+      vanilla_css: createPrompt(
+        'Magnetic CTA Button',
+        'Construye un botón premium con border glow y pseudo-elemento de brillo animado.',
+        'Usa mousemove para calcular offset relativo y aplicar translate3d con transición suave. Resetea en mouseleave.',
+        'vanilla_css'
+      )
+    }
+  },
+  {
+    slug: 'skeleton-shimmer',
+    name: 'Skeleton Loading Shimmer',
+    category: 'Loading',
+    description: 'Placeholder animado con gradiente shimmer para estados de carga.',
+    Demo: Demos.SkeletonShimmer,
+    prompts: {
+      react_tailwind: createPrompt(
+        'Skeleton Loading Shimmer',
+        'Crea barras skeleton con gradient shimmer (background-size 200% 100%) y animación lineal de 1.5s infinita.',
+        'Incluye una tarjeta de ejemplo con varias filas y role="status" para accesibilidad.',
+        'react_tailwind'
+      ),
+      vanilla_css: createPrompt(
+        'Skeleton Loading Shimmer',
+        'Usa keyframes para mover background-position de 200% a -200% con gradiente oscuro.',
+        'Define tamaños variables de filas (100%, 76%, 88%, 62%) y bordes redondeados.',
+        'vanilla_css'
+      )
+    }
+  },
+  {
+    slug: 'spotlight-cursor',
+    name: 'Spotlight Cursor',
+    category: 'Cursor Effect',
+    description: 'Spotlight radial que sigue el cursor sobre fondo oscuro.',
+    Demo: Demos.SpotlightCursor,
+    prompts: {
+      react_tailwind: createPrompt(
+        'Spotlight Cursor',
+        'Crea un contenedor dark con radial-gradient que se actualiza según posición del mouse en porcentaje X/Y.',
+        'Evita re-render costoso y mantén la animación suave; añade fallback para touch.',
+        'react_tailwind'
+      ),
+      vanilla_css: createPrompt(
+        'Spotlight Cursor',
+        'Implementa custom properties --x y --y actualizadas en mousemove para controlar el centro del radial-gradient.',
+        'Configura spotlight con color rgba(99,102,241,0.2) y caída transparente al 46%-50%.',
+        'vanilla_css'
+      )
+    }
+  },
+  {
+    slug: 'morphing-shape',
+    name: 'Morphing Shape',
+    category: 'Layout Motion',
+    description: 'Forma que morph entre círculo y esquinas orgánicas con rotación continua.',
+    Demo: Demos.MorphingShape,
+    prompts: {
+      react_tailwind: createPrompt(
+        'Morphing Shape',
+        'Crea un bloque 120x120 con gradiente que anima border-radius y rotate en 4 estados.',
+        'Duración 4s, ease-in-out, bucle infinito con keyframes declarativos.',
+        'react_tailwind'
+      ),
+      vanilla_css: createPrompt(
+        'Morphing Shape',
+        'Define @keyframes morph con 0/25/50/75/100 cambiando border-radius y rotación.',
+        'Fondo gradiente 135deg (#6366f1 a #ec4899) y modo infinito.',
+        'vanilla_css'
+      )
+    }
+  },
+  {
+    slug: 'ripple-button',
+    name: 'Ripple Button',
+    category: 'Micro Interactions',
+    description: 'Botón con onda tipo ripple en loop para demo visual inmediata.',
+    Demo: Demos.RippleButtonDemo,
+    prompts: {
+      react_tailwind: createPrompt(
+        'Ripple Button',
+        'Crea botón indigo con pseudo-capa circular animada desde escala 0 a 2 y opacidad 1 a 0 en 2s infinito.',
+        'Mantén overflow hidden, radio 8px y tipografía semibold.',
+        'react_tailwind'
+      ),
+      vanilla_css: createPrompt(
+        'Ripple Button',
+        'Usa elemento absoluto circular centrado y keyframes ripple (scale + fade).',
+        'Botón base #6366f1 con texto blanco y padding 12x28px.',
+        'vanilla_css'
+      )
+    }
+  },
+  {
+    slug: 'scroll-progress-demo',
+    name: 'Scroll Progress Bar',
+    category: 'Scroll Effect',
+    description: 'Barra de progreso de scroll minimal con gradiente y actualización fluida.',
+    Demo: Demos.ScrollProgressDemo,
+    prompts: {
+      react_tailwind: createPrompt(
+        'Scroll Progress Bar',
+        'Crea barra fixed superior de 3px con fill en gradiente que representa scrollY/documentHeight.',
+        'Usa requestAnimationFrame o listener passive con throttling para performance.',
+        'react_tailwind'
+      ),
+      vanilla_css: createPrompt(
+        'Scroll Progress Bar',
+        'Implementa contenedor de 3px y fill con linear-gradient(#6366f1,#8b5cf6).',
+        'Actualiza width o transform:scaleX según porcentaje de scroll en JS.',
+        'vanilla_css'
+      )
+    }
   }
 ];
-
