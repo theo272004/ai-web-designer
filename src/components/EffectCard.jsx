@@ -1,40 +1,20 @@
-import { useState } from 'react'
+import React from 'react'
 
-export function EffectCard({ effect }) {
-  const [copied, setCopied] = useState(false)
-  const Demo = effect.Demo
-
-  async function handleCopy() {
-    try {
-      await navigator.clipboard.writeText(effect.prompt)
-      setCopied(true)
-      window.setTimeout(() => setCopied(false), 1800)
-    } catch {
-      setCopied(false)
-    }
-  }
-
+export function EffectCard({ effect, onClick }) {
   return (
-    <article className="effect-card">
-      <div className="effect-copy">
-        <div className="effect-meta">
-          <span className="effect-label">Effect</span>
-          <h2>{effect.name}</h2>
-        </div>
-        <p className="effect-description">{effect.description}</p>
-        <div className="prompt-panel">
-          <div className="prompt-head">
-            <span>Prompt en español</span>
-            <button type="button" className="copy-button" onClick={handleCopy}>
-              {copied ? 'Copiado' : 'Copiar prompt'}
-            </button>
-          </div>
-          <p>{effect.prompt}</p>
+    <article className="effect-card" onClick={onClick}>
+      <div className="effect-preview-card">
+        <div className="demo-container" style={{ transform: 'scale(0.6)' }}>
+          <effect.Demo />
         </div>
       </div>
-
-      <div className="effect-preview">
-        <Demo />
+      <div className="effect-info">
+        <span className="effect-category">{effect.category}</span>
+        <h3 className="effect-title">{effect.name}</h3>
+        <p className="effect-desc">{effect.description}</p>
+        <button className="btn btn-secondary" style={{ width: '100%', marginTop: 'auto' }}>
+          Ver Prompt & Demo
+        </button>
       </div>
     </article>
   )
