@@ -14,6 +14,7 @@ A partir de ahora, todo el código que generes debe seguir estas reglas:
 export default function App() {
   const [selectedEffect, setSelectedEffect] = useState(null)
   const [systemPromptCopied, setSystemPromptCopied] = useState(false)
+  const homeHref = import.meta.env.BASE_URL
 
   const copySystemPrompt = () => {
     navigator.clipboard.writeText(SYSTEM_PROMPT)
@@ -25,7 +26,7 @@ export default function App() {
     <div className="site-shell">
       <nav className="nav">
         <div className="nav-inner">
-          <a href="/" className="logo">
+          <a href={homeHref} className="logo">
             <div className="logo-icon">AI</div>
             <span>Web Designer</span>
           </a>
