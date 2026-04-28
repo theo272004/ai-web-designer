@@ -1,5 +1,5 @@
 import React, { useRef, useState } from 'react';
-import { motion, useScroll, useTransform, useSpring, useReducedMotion, AnimatePresence } from 'framer-motion';
+import { motion, useScroll, useTransform, useSpring, useReducedMotion, AnimatePresence, useMotionValue } from 'framer-motion';
 
 // ============================================================================
 // EFECTO 1: Texto con scroll - "91% de las empresas en Colombia son pymes"
