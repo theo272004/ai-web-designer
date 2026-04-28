@@ -183,8 +183,9 @@ const ServicesWithBlobs = () => {
 // ============================================================================
 // EFECTO 4: Tilt Slide - Tarjetas 3D que giran con el mouse
 // ============================================================================
-const TiltSlide = ({ src, isActive, position, onClick }) => {
+const TiltSlide = ({ slide, isActive, position, onClick }) => {
   const cardRef = useRef(null);
+  const src = slide.mockup;
   const rotateX = useMotionValue(0);
   const rotateY = useMotionValue(0);
   const springX = useSpring(rotateX, { stiffness: 150, damping: 20 });
