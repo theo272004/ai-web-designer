@@ -1,27 +1,17 @@
 # AI Web Designer
 
-Galería de efectos web inspirados en una landing de referencia y convertidos en una biblioteca genérica de motion patterns.
+Biblioteca estática de efectos web con previews visuales, filtros, modal de detalle y prompts listos para copiar.
 
-## Incluye
+## Estructura
 
-- `Staggered Statement Reveal`: reveal editorial por líneas con blur y stagger al hacer scroll.
-- `Process Orbit Steps`: pasos distribuidos alrededor de un núcleo con aparición en cascada y flotación sutil.
-- `Services Layered Panels`: paneles apilados con profundidad, reveal suave y foco por hover.
-
-Cada entrada incluye demo viva, descripción breve, prompt en español y botón para copiar.
-
-## Stack
-
-- Vite
-- React
-- CSS puro
+- `index.html`: página completa con HTML, CSS y JavaScript internos.
+- `scripts/build-static.mjs`: copia `index.html` y `favicon.svg` a `dist/` y `docs/`.
+- `dist/`: salida usada por GitHub Actions.
+- `docs/`: copia local lista para GitHub Pages si se publica desde carpeta `docs`.
 
 ## Ejecutar
 
-```powershell
-npm install
-npm run dev
-```
+Puedes abrir `index.html` directamente en el navegador.
 
 ## Build
 
@@ -29,6 +19,4 @@ npm run dev
 npm run build
 ```
 
-## Notas
-
-El proyecto está organizado para facilitar agregar más efectos: la galería usa un arreglo estructurado en `src/data/effects.js` y demos reutilizables en `src/effects/Demos.jsx`.
+El build no compila frameworks; solo sincroniza la página estática.

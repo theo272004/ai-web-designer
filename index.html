@@ -1,14 +1,992 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="es">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>AI Web Designer — Premium UI Gallery</title>
-    <meta name="description" content="Galería de efectos web recreados y explicados con prompts listos para IA." />
-    <link rel="icon" type="image/svg+xml" href="./favicon.svg" />
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.jsx"></script>
-  </body>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Web Designer — Biblioteca de efectos web</title>
+  <meta name="description" content="Galería simple de animaciones web con previews visuales, filtros y prompts listos para copiar.">
+  <link rel="icon" type="image/svg+xml" href="./favicon.svg">
+  <style>
+    :root {
+      --bg: #f4f1ea;
+      --ink: #121212;
+      --muted: #67635d;
+      --line: #d8d0c3;
+      --panel: #fffaf0;
+      --panel-2: #e8f0f6;
+      --dark: #11141a;
+      --blue: #255fdf;
+      --cyan: #28a9bd;
+      --violet: #7d4ee8;
+      --amber: #d99a28;
+      --green: #268a58;
+      --radius: 8px;
+      --shadow: 0 24px 70px rgba(22, 20, 17, 0.14);
+      --ease: cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: var(--bg);
+      color: var(--ink);
+      line-height: 1.5;
+    }
+
+    button, input { font: inherit; }
+    button { cursor: pointer; }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      background: rgba(244, 241, 234, 0.86);
+      border-bottom: 1px solid var(--line);
+      backdrop-filter: blur(18px);
+    }
+
+    .nav {
+      max-width: 1220px;
+      margin: 0 auto;
+      padding: 14px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 850;
+      letter-spacing: 0;
+    }
+
+    .mark {
+      width: 34px;
+      height: 34px;
+      display: grid;
+      place-items: center;
+      border-radius: 9px;
+      color: white;
+      background: linear-gradient(135deg, var(--blue), var(--cyan));
+      box-shadow: 0 14px 32px rgba(37, 95, 223, 0.22);
+    }
+
+    .nav-actions { display: flex; align-items: center; gap: 10px; }
+
+    .btn {
+      min-height: 40px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 0 14px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      background: rgba(255, 250, 240, 0.74);
+      color: var(--ink);
+      text-decoration: none;
+      font-size: 13px;
+      font-weight: 760;
+      transition: transform 220ms var(--ease), border-color 220ms var(--ease), background 220ms var(--ease);
+    }
+
+    .btn:hover { transform: translateY(-1px); border-color: #aaa092; background: #fffaf0; }
+    .btn.primary { background: var(--ink); color: white; border-color: var(--ink); }
+    .btn.primary:hover { background: #27231e; }
+
+    .hero {
+      max-width: 1220px;
+      margin: 0 auto;
+      padding: 76px 20px 38px;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 440px;
+      gap: 54px;
+      align-items: center;
+    }
+
+    .eyebrow {
+      margin: 0 0 18px;
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+      color: var(--blue);
+      font-size: 12px;
+      font-weight: 850;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+    }
+
+    .eyebrow::before {
+      content: "";
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--blue);
+      box-shadow: 0 0 0 6px rgba(37, 95, 223, 0.12);
+    }
+
+    h1 {
+      margin: 0;
+      max-width: 850px;
+      font-size: clamp(3rem, 8vw, 6.8rem);
+      line-height: 0.93;
+      letter-spacing: 0;
+    }
+
+    .hero-copy {
+      max-width: 680px;
+      margin: 24px 0 0;
+      color: var(--muted);
+      font-size: clamp(1rem, 1.8vw, 1.16rem);
+    }
+
+    .hero-actions {
+      margin-top: 30px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .hero-panel {
+      position: relative;
+      min-height: 440px;
+      border-radius: 14px;
+      background: linear-gradient(145deg, #fffaf0, #e7edf4);
+      border: 1px solid rgba(18, 18, 18, 0.08);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .hero-panel::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(rgba(18, 18, 18, 0.035) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(18, 18, 18, 0.035) 1px, transparent 1px);
+      background-size: 34px 34px;
+      mask-image: radial-gradient(circle at 50% 45%, black, transparent 74%);
+    }
+
+    .hero-stack {
+      position: absolute;
+      inset: 42px;
+    }
+
+    .hero-card {
+      position: absolute;
+      width: 270px;
+      height: 190px;
+      border-radius: 16px;
+      padding: 22px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      background: white;
+      border: 1px solid rgba(255, 255, 255, 0.86);
+      box-shadow: 0 28px 70px rgba(20, 24, 35, 0.20);
+    }
+
+    .hero-card span { color: var(--blue); font-weight: 900; }
+    .hero-card strong { max-width: 170px; font-size: 22px; line-height: 1; }
+    .hero-card:nth-child(1) { left: 92px; top: 38px; transform: rotate(9deg); background: #e8f0f6; }
+    .hero-card:nth-child(2) { left: 42px; top: 104px; transform: rotate(-7deg); background: #fff7e3; }
+    .hero-card:nth-child(3) { left: 118px; top: 174px; transform: rotate(1deg); }
+
+    .tool-band {
+      max-width: 1220px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    .toolbar {
+      display: grid;
+      grid-template-columns: minmax(240px, 380px) 1fr;
+      gap: 12px;
+      align-items: center;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: rgba(255, 250, 240, 0.78);
+      padding: 10px;
+      box-shadow: 0 18px 50px rgba(22, 20, 17, 0.06);
+    }
+
+    .search {
+      min-height: 44px;
+      width: 100%;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: white;
+      padding: 0 13px;
+      color: var(--ink);
+      outline: none;
+    }
+
+    .search:focus { border-color: var(--blue); box-shadow: 0 0 0 3px rgba(37, 95, 223, 0.12); }
+
+    .filters { display: flex; flex-wrap: wrap; gap: 8px; }
+    .chip {
+      min-height: 36px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: transparent;
+      padding: 0 13px;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 760;
+    }
+    .chip.active { background: var(--ink); border-color: var(--ink); color: white; }
+
+    .section-head {
+      max-width: 1220px;
+      margin: 16px auto 0;
+      padding: 0 20px 18px;
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 20px;
+    }
+
+    .section-head h2 {
+      margin: 0;
+      font-size: clamp(1.7rem, 3vw, 3rem);
+      line-height: 1;
+    }
+
+    .section-head p { margin: 0; color: var(--muted); max-width: 420px; font-size: 14px; }
+
+    .grid {
+      max-width: 1220px;
+      margin: 0 auto;
+      padding: 0 20px 80px;
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    .card {
+      min-height: 430px;
+      display: flex;
+      flex-direction: column;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: rgba(255, 250, 240, 0.84);
+      overflow: hidden;
+      box-shadow: 0 18px 54px rgba(22, 20, 17, 0.08);
+      transition: transform 260ms var(--ease), box-shadow 260ms var(--ease), border-color 260ms var(--ease);
+    }
+
+    .card:hover {
+      transform: translateY(-5px);
+      border-color: #b4a897;
+      box-shadow: 0 28px 74px rgba(22, 20, 17, 0.14);
+    }
+
+    .preview {
+      height: 230px;
+      position: relative;
+      display: grid;
+      place-items: center;
+      background: #11141a;
+      overflow: hidden;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .preview::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(rgba(255,255,255,0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.04) 1px, transparent 1px);
+      background-size: 28px 28px;
+      mask-image: radial-gradient(circle at 50% 50%, black, transparent 72%);
+    }
+
+    .card-body {
+      padding: 18px;
+      display: flex;
+      flex: 1;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .meta {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+    }
+
+    .tag {
+      color: var(--blue);
+      font-size: 11px;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .stack {
+      color: var(--muted);
+      font-size: 11px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 4px 8px;
+      background: rgba(255,255,255,0.5);
+    }
+
+    .card h3 {
+      margin: 0;
+      font-size: 1.16rem;
+      line-height: 1.15;
+      letter-spacing: 0;
+    }
+
+    .card p { margin: 0; color: var(--muted); font-size: 13px; }
+    .actions { margin-top: auto; display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+
+    .empty {
+      grid-column: 1 / -1;
+      border: 1px dashed var(--line);
+      border-radius: 12px;
+      padding: 32px;
+      color: var(--muted);
+      text-align: center;
+    }
+
+    /* Distinct previews */
+    .pv { position: relative; z-index: 1; width: 78%; height: 68%; }
+
+    .pv-glass .glass-card {
+      width: 72%;
+      height: 70%;
+      margin: 8% auto;
+      border-radius: 16px;
+      border: 1px solid rgba(255,255,255,0.28);
+      background: rgba(255,255,255,0.12);
+      backdrop-filter: blur(12px);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.22), 0 30px 70px rgba(0,0,0,0.28);
+      display: grid;
+      place-items: center;
+      color: white;
+      font-weight: 850;
+    }
+
+    .pv-magnetic { display: grid; place-items: center; }
+    .magnetic-btn {
+      position: relative;
+      overflow: hidden;
+      border: 1px solid rgba(40,169,189,0.56);
+      border-radius: 999px;
+      background: #172033;
+      color: white;
+      padding: 16px 28px;
+      font-weight: 900;
+      animation: magnetic 3s ease-in-out infinite;
+    }
+    .magnetic-btn::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(110deg, transparent 30%, rgba(255,255,255,0.45), transparent 70%);
+      animation: shine 2.3s linear infinite;
+    }
+    @keyframes magnetic { 0%,100% { transform: translate(0,0); } 50% { transform: translate(10px,-8px); } }
+    @keyframes shine { from { transform: translateX(-120%); } to { transform: translateX(120%); } }
+
+    .pv-scramble {
+      display: grid;
+      place-items: center;
+      color: #28a9bd;
+      font-family: "JetBrains Mono", ui-monospace, SFMono-Regular, Consolas, monospace;
+      font-size: 24px;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-shadow: 0 0 28px rgba(40,169,189,0.42);
+    }
+
+    .pv-tilt .tilt-card {
+      width: 70%;
+      height: 76%;
+      margin: 5% auto;
+      border-radius: 15px;
+      background: linear-gradient(135deg, #fff, #dce8f8);
+      box-shadow: 0 34px 74px rgba(0,0,0,0.34);
+      transform: perspective(800px) rotateX(10deg) rotateY(-16deg);
+      display: grid;
+      place-items: center;
+      color: #121212;
+      font-weight: 900;
+      transition: transform 420ms var(--ease);
+    }
+    .card:hover .tilt-card { transform: perspective(800px) rotateX(0deg) rotateY(0deg) translateY(-4px); }
+
+    .pv-stacked { overflow: visible; }
+    .stack-card {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      width: 64%;
+      height: 66%;
+      border-radius: 16px;
+      padding: 18px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      background: white;
+      color: #121212;
+      box-shadow: 0 26px 70px rgba(0,0,0,0.26);
+      transition: transform 520ms var(--ease);
+    }
+    .stack-card span { color: var(--blue); font-weight: 900; font-size: 12px; }
+    .stack-card strong { max-width: 130px; line-height: 1.05; }
+    .stack-card.back { background: #dce8f8; transform: translate(-28%,-62%) rotate(10deg) scale(0.88); }
+    .stack-card.mid { background: #fff4d8; transform: translate(-52%,-50%) rotate(-7deg) scale(0.96); }
+    .stack-card.front { transform: translate(-72%,-38%) rotate(2deg); }
+    .card:hover .stack-card.back { transform: translate(-20%,-66%) rotate(13deg) scale(0.88); }
+    .card:hover .stack-card.mid { transform: translate(-52%,-50%) rotate(-10deg) scale(0.98); }
+    .card:hover .stack-card.front { transform: translate(-80%,-33%) rotate(0deg) scale(1.03); }
+
+    .pv-skeleton { display: grid; place-content: center; gap: 12px; }
+    .sk { height: 14px; border-radius: 99px; background: linear-gradient(90deg,#202a3b,#40516d,#202a3b); background-size: 200% 100%; animation: shimmer 1.4s linear infinite; }
+    .sk.avatar { width: 56px; height: 56px; border-radius: 18px; margin: 0 auto; }
+    .sk.wide { width: 220px; } .sk.mid { width: 170px; } .sk.short { width: 120px; }
+    @keyframes shimmer { to { background-position: -200% 0; } }
+
+    .pv-progress { display: grid; align-content: center; gap: 18px; color: white; }
+    .progress-label { color: rgba(255,255,255,0.72); font-size: 12px; text-transform: uppercase; letter-spacing: 0.12em; }
+    .progress-track { height: 5px; border-radius: 99px; background: rgba(255,255,255,0.14); overflow: hidden; }
+    .progress-track i { display: block; height: 100%; background: linear-gradient(90deg,var(--blue),var(--cyan),var(--amber)); animation: progress 2.4s ease-in-out infinite; }
+    @keyframes progress { 0% { width: 12%; } 70%,100% { width: 84%; } }
+
+    .pv-spotlight {
+      width: 100%;
+      height: 100%;
+      display: grid;
+      place-items: center;
+      color: white;
+      background: radial-gradient(circle at var(--x,62%) var(--y,42%), rgba(40,169,189,0.38), transparent 34%);
+    }
+    .pv-spotlight strong { font-size: 24px; }
+
+    .pv-kinetic {
+      display: grid;
+      place-items: center;
+      font-size: 46px;
+      font-weight: 950;
+      color: transparent;
+      background: linear-gradient(90deg, #fff, var(--cyan), var(--amber), #fff);
+      -webkit-background-clip: text;
+      background-clip: text;
+      background-size: 240% 100%;
+      animation: kinetic 3s linear infinite;
+    }
+    @keyframes kinetic { to { background-position: 240% 0; } }
+
+    .pv-particles span {
+      position: absolute;
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: var(--cyan);
+      opacity: 0.72;
+      animation: particle 5s ease-in-out infinite;
+    }
+    .pv-particles span:nth-child(1) { left: 18%; top: 18%; }
+    .pv-particles span:nth-child(2) { left: 70%; top: 24%; animation-delay: 0.5s; background: var(--amber); }
+    .pv-particles span:nth-child(3) { left: 40%; top: 60%; animation-delay: 1s; background: var(--violet); }
+    .pv-particles span:nth-child(4) { left: 20%; top: 72%; animation-delay: 1.5s; }
+    .pv-particles span:nth-child(5) { left: 78%; top: 68%; animation-delay: 2s; background: var(--green); }
+    @keyframes particle { 0%,100% { transform: translateY(0) scale(1); } 50% { transform: translateY(-24px) scale(1.4); } }
+
+    .pv-morph { display: grid; place-items: center; }
+    .morph {
+      width: 92px;
+      height: 92px;
+      background: linear-gradient(135deg, var(--blue), var(--amber));
+      animation: morph 4s ease-in-out infinite;
+    }
+    @keyframes morph {
+      0%,100% { border-radius: 50%; transform: rotate(0deg); }
+      25% { border-radius: 14px; transform: rotate(90deg); }
+      50% { border-radius: 50% 14px 50% 14px; transform: rotate(180deg); }
+      75% { border-radius: 14px 50% 14px 50%; transform: rotate(270deg); }
+    }
+
+    .pv-ripple { display: grid; place-items: center; }
+    .ripple-btn {
+      position: relative;
+      overflow: hidden;
+      border: 0;
+      border-radius: 10px;
+      background: var(--blue);
+      color: white;
+      padding: 14px 26px;
+      font-weight: 900;
+    }
+    .ripple-btn::after {
+      content: "";
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      width: 86px;
+      height: 86px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.32);
+      animation: ripple 1.8s ease-out infinite;
+    }
+    @keyframes ripple { from { transform: translate(-50%,-50%) scale(0); opacity: 1; } to { transform: translate(-50%,-50%) scale(2.2); opacity: 0; } }
+
+    .modal {
+      position: fixed;
+      inset: 0;
+      z-index: 50;
+      display: none;
+      place-items: center;
+      padding: 18px;
+      background: rgba(18, 18, 18, 0.58);
+      backdrop-filter: blur(10px);
+    }
+    .modal.open { display: grid; }
+    .dialog {
+      width: min(1120px, 100%);
+      max-height: 92vh;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 420px;
+      border-radius: 14px;
+      background: var(--panel);
+      overflow: hidden;
+      box-shadow: 0 44px 120px rgba(0,0,0,0.36);
+    }
+    .modal-preview { min-height: 560px; display: grid; place-items: center; background: var(--dark); }
+    .modal-preview .preview { width: 100%; height: 100%; border: 0; }
+    .modal-preview .pv { width: min(74%, 620px); height: 380px; }
+    .modal-preview .stack-card { width: 58%; height: 62%; padding: 30px; }
+    .modal-preview .stack-card strong { font-size: 28px; max-width: 260px; }
+    .modal-info { padding: 22px; display: flex; flex-direction: column; gap: 14px; min-height: 560px; }
+    .modal-info h2 { margin: 0; font-size: 1.7rem; line-height: 1.05; }
+    .modal-info p { margin: 0; color: var(--muted); }
+    .prompt {
+      flex: 1;
+      min-height: 220px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: #151515;
+      color: #e8e3d8;
+      padding: 14px;
+      overflow: auto;
+      white-space: pre-wrap;
+      font: 12px/1.55 ui-monospace, SFMono-Regular, Consolas, monospace;
+    }
+    .modal-row { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+    .close { position: absolute; right: 18px; top: 18px; border-color: rgba(255,255,255,0.22); background: rgba(255,255,255,0.12); color: white; }
+
+    .toast {
+      position: fixed;
+      left: 50%;
+      bottom: 22px;
+      z-index: 80;
+      transform: translateX(-50%) translateY(120%);
+      background: var(--ink);
+      color: white;
+      border-radius: 999px;
+      padding: 11px 16px;
+      font-size: 13px;
+      font-weight: 800;
+      transition: transform 260ms var(--ease);
+    }
+    .toast.show { transform: translateX(-50%) translateY(0); }
+
+    footer {
+      border-top: 1px solid var(--line);
+      padding: 30px 20px;
+      text-align: center;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    @media (max-width: 960px) {
+      .hero { grid-template-columns: 1fr; padding-top: 48px; }
+      .hero-panel { min-height: 340px; }
+      .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .toolbar { grid-template-columns: 1fr; }
+      .dialog { grid-template-columns: 1fr; overflow-y: auto; }
+      .modal-preview, .modal-info { min-height: auto; }
+      .modal-preview { height: 360px; }
+    }
+
+    @media (max-width: 680px) {
+      .nav, .section-head { align-items: flex-start; flex-direction: column; }
+      .nav-actions { width: 100%; display: grid; grid-template-columns: 1fr 1fr; }
+      .hero { padding-top: 36px; }
+      .grid { grid-template-columns: 1fr; }
+      .actions, .modal-row { grid-template-columns: 1fr; }
+      .preview { height: 210px; }
+      .hero-card { width: 230px; height: 168px; }
+      .hero-card:nth-child(1) { left: 66px; top: 36px; }
+      .hero-card:nth-child(2) { left: 20px; top: 98px; }
+      .hero-card:nth-child(3) { left: 78px; top: 158px; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        scroll-behavior: auto !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <nav class="nav">
+      <div class="brand"><span class="mark">AI</span><span>Web Designer</span></div>
+      <div class="nav-actions">
+        <a class="btn" href="#gallery">Galería</a>
+        <button class="btn primary" id="copyBase">Copiar prompt base</button>
+      </div>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div>
+        <p class="eyebrow">Biblioteca visual de recursos web</p>
+        <h1>Animaciones listas para copiar, comparar y reutilizar.</h1>
+        <p class="hero-copy">
+          Una página simple para guardar efectos, ver previews que sí diferencian cada interacción y copiar prompts técnicos sin depender de una app pesada.
+        </p>
+        <div class="hero-actions">
+          <a class="btn primary" href="#gallery">Explorar biblioteca</a>
+          <button class="btn" id="copyStacked">Copiar cartas superpuestas</button>
+        </div>
+      </div>
+      <aside class="hero-panel" aria-label="Vista previa de cartas superpuestas">
+        <div class="hero-stack">
+          <article class="hero-card"><span>03</span><strong>Automatización</strong></article>
+          <article class="hero-card"><span>02</span><strong>Diseño UI</strong></article>
+          <article class="hero-card"><span>01</span><strong>Desarrollo web</strong></article>
+        </div>
+      </aside>
+    </section>
+
+    <section class="tool-band" id="gallery">
+      <div class="toolbar">
+        <input class="search" id="search" type="search" placeholder="Buscar efecto, categoría o tecnología..." aria-label="Buscar efectos">
+        <div class="filters" id="filters"></div>
+      </div>
+    </section>
+
+    <section class="section-head">
+      <div>
+        <p class="eyebrow">Recursos</p>
+        <h2 id="countTitle">Efectos disponibles</h2>
+      </div>
+      <p>Los previews son escenas CSS pequeñas y específicas. No son secciones gigantes reducidas dentro de una tarjeta.</p>
+    </section>
+
+    <section class="grid" id="grid"></section>
+  </main>
+
+  <div class="modal" id="modal" aria-hidden="true">
+    <button class="btn close" id="closeModal">Cerrar</button>
+    <div class="dialog" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+      <div class="modal-preview" id="modalPreview"></div>
+      <aside class="modal-info">
+        <span class="tag" id="modalCategory"></span>
+        <h2 id="modalTitle"></h2>
+        <p id="modalDescription"></p>
+        <div class="modal-row">
+          <button class="btn primary" id="copyPrompt">Copiar prompt</button>
+          <button class="btn" id="copyMaster">Copiar maestro</button>
+        </div>
+        <pre class="prompt" id="modalPrompt"></pre>
+      </aside>
+    </div>
+  </div>
+
+  <div class="toast" id="toast">Copiado</div>
+
+  <footer>AI Web Designer · HTML, CSS y JavaScript en un solo archivo.</footer>
+
+  <script>
+    const basePrompt = `Actúa como un ingeniero frontend senior. Crea el efecto solicitado con HTML, CSS y JavaScript limpios.
+Reglas:
+1. Entrega código completo, ejecutable y sin dependencias innecesarias.
+2. Define timing, easing, transforms, estados hover/focus y fallback reduced-motion.
+3. Mantén el layout responsive.
+4. No uses decoración gratuita: cada animación debe explicar una interacción real.
+5. Prioriza claridad visual, accesibilidad y rendimiento.`;
+
+    const effects = [
+      {
+        id: "glass",
+        title: "Glassmorphism Card",
+        category: "Micro-interaction",
+        stack: "CSS",
+        type: "glass",
+        description: "Tarjeta de cristal con blur, borde suave y profundidad controlada.",
+        prompt: `Crea una tarjeta glassmorphism con background rgba(255,255,255,.12), backdrop-filter blur(12px), borde semitransparente, sombra profunda y hover sutil de translateY(-4px). Incluye fallback sin backdrop-filter.`
+      },
+      {
+        id: "magnetic",
+        title: "Magnetic Button",
+        category: "Micro-interaction",
+        stack: "JS + CSS",
+        type: "magnetic",
+        description: "Botón que sigue el cursor con inercia y brillo lateral.",
+        prompt: `Crea un botón magnético. En mousemove calcula la distancia al centro del botón y aplica translate3d con intensidad 0.18. En mouseleave vuelve a 0,0. Añade una capa de brillo con linear-gradient y respeta prefers-reduced-motion.`
+      },
+      {
+        id: "scramble",
+        title: "Text Scramble Reveal",
+        category: "Text Animation",
+        stack: "JS",
+        type: "scramble",
+        description: "Texto técnico que se revela con caracteres aleatorios antes del estado final.",
+        prompt: `Crea un text scramble reveal para la frase SYSTEM_READY. Usa requestAnimationFrame, caracteres aleatorios y transición progresiva por índice. Debe detenerse al completar el texto y ser accesible con aria-label.`
+      },
+      {
+        id: "tilt",
+        title: "3D Tilt Card",
+        category: "3D & Depth",
+        stack: "JS + CSS",
+        type: "tilt",
+        description: "Carta 3D con rotación controlada por posición del cursor.",
+        prompt: `Crea una carta 3D tilt con perspective 800px. En mousemove calcula rotateX y rotateY máximos de 10deg. En mouseleave vuelve a rotate(0). Agrega sombra dinámica y transición cubic-bezier(.22,1,.36,1).`
+      },
+      {
+        id: "stacked",
+        title: "Services Layered Panels",
+        category: "Layout Motion",
+        stack: "CSS",
+        type: "stacked",
+        description: "Cartas de servicios superpuestas con capas, rotación y profundidad.",
+        prompt: `Crea tres cartas superpuestas para servicios. La carta trasera debe estar desplazada arriba/derecha con rotate(10deg), la media a la izquierda con rotate(-7deg), y la frontal más abajo con rotate(2deg). En hover separa las capas, aumenta z-depth y elimina la rotación de la frontal. Usa CSS puro, border-radius 16px, sombras profundas y responsive.`
+      },
+      {
+        id: "skeleton",
+        title: "Skeleton Loading",
+        category: "Loading",
+        stack: "CSS",
+        type: "skeleton",
+        description: "Estado de carga con shimmer para avatar y líneas de contenido.",
+        prompt: `Crea un skeleton loader con avatar y tres líneas. Usa linear-gradient, background-size 200% 100% y keyframes shimmer de 1.4s. Añade role="status" y texto sr-only.`
+      },
+      {
+        id: "progress",
+        title: "Scroll Progress Bar",
+        category: "Scroll Effect",
+        stack: "JS + CSS",
+        type: "progress",
+        description: "Barra que indica el progreso de lectura de la página.",
+        prompt: `Crea una barra fija superior de progreso de scroll. Calcula porcentaje con scrollY / (scrollHeight - innerHeight). Actualiza transform scaleX con requestAnimationFrame y listener passive.`
+      },
+      {
+        id: "spotlight",
+        title: "Spotlight Cursor",
+        category: "Cursor Effect",
+        stack: "JS + CSS",
+        type: "spotlight",
+        description: "Gradiente radial que sigue el cursor dentro de un panel.",
+        prompt: `Crea un spotlight cursor usando custom properties --x y --y actualizadas en mousemove. El background debe ser radial-gradient(circle at var(--x) var(--y), color, transparent 34%). En touch usa centro fijo.`
+      },
+      {
+        id: "kinetic",
+        title: "Kinetic Typography",
+        category: "Text Animation",
+        stack: "CSS",
+        type: "kinetic",
+        description: "Tipografía con gradiente en movimiento y peso editorial.",
+        prompt: `Crea texto cinético con background-clip:text, gradiente horizontal animado y font-weight 950. Usa background-size 240% y keyframes de background-position. Incluye fallback reduced-motion.`
+      },
+      {
+        id: "particles",
+        title: "Floating Particles",
+        category: "Background FX",
+        stack: "CSS",
+        type: "particles",
+        description: "Partículas flotantes con desfases y tamaños controlados.",
+        prompt: `Crea cinco partículas absolutas con border-radius 50%, opacidades distintas y keyframes de translateY + scale. Cada partícula debe tener delay diferente para evitar sincronía.`
+      },
+      {
+        id: "morph",
+        title: "Morphing Shape",
+        category: "Shape Motion",
+        stack: "CSS",
+        type: "morph",
+        description: "Forma que cambia radio de borde y rotación en loop.",
+        prompt: `Crea una forma de 92x92px que anime border-radius y rotate en cuatro estados. Duración 4s, ease-in-out, loop infinito y fallback reduced-motion.`
+      },
+      {
+        id: "ripple",
+        title: "Ripple Button",
+        category: "Micro-interaction",
+        stack: "CSS",
+        type: "ripple",
+        description: "Botón con onda radial continua desde el centro.",
+        prompt: `Crea un botón con ripple radial. Usa pseudo-elemento absoluto centrado, scale de 0 a 2.2 y opacity de 1 a 0 en 1.8s. Mantén overflow hidden y estados focus visibles.`
+      }
+    ];
+
+    const grid = document.getElementById("grid");
+    const filters = document.getElementById("filters");
+    const search = document.getElementById("search");
+    const countTitle = document.getElementById("countTitle");
+    const modal = document.getElementById("modal");
+    const modalPreview = document.getElementById("modalPreview");
+    const modalTitle = document.getElementById("modalTitle");
+    const modalCategory = document.getElementById("modalCategory");
+    const modalDescription = document.getElementById("modalDescription");
+    const modalPrompt = document.getElementById("modalPrompt");
+    const toast = document.getElementById("toast");
+    let activeCategory = "Todas";
+    let currentEffect = effects[0];
+
+    const categories = ["Todas", ...new Set(effects.map(effect => effect.category))];
+
+    function preview(type) {
+      const map = {
+        glass: `<div class="preview"><div class="pv pv-glass"><div class="glass-card">Glass Card</div></div></div>`,
+        magnetic: `<div class="preview"><div class="pv pv-magnetic"><button class="magnetic-btn">Magnetic</button></div></div>`,
+        scramble: `<div class="preview"><div class="pv pv-scramble">SYSTEM_READY</div></div>`,
+        tilt: `<div class="preview"><div class="pv pv-tilt"><div class="tilt-card">3D Tilt</div></div></div>`,
+        stacked: `<div class="preview"><div class="pv pv-stacked"><article class="stack-card back"><span>03</span><strong>Automatización</strong></article><article class="stack-card mid"><span>02</span><strong>Diseño UI</strong></article><article class="stack-card front"><span>01</span><strong>Desarrollo web</strong></article></div></div>`,
+        skeleton: `<div class="preview"><div class="pv pv-skeleton"><div class="sk avatar"></div><div class="sk wide"></div><div class="sk mid"></div><div class="sk short"></div></div></div>`,
+        progress: `<div class="preview"><div class="pv pv-progress"><span class="progress-label">Scroll progress</span><div class="progress-track"><i></i></div></div></div>`,
+        spotlight: `<div class="preview"><div class="pv pv-spotlight"><strong>Cursor</strong></div></div>`,
+        kinetic: `<div class="preview"><div class="pv pv-kinetic">FLOW</div></div>`,
+        particles: `<div class="preview"><div class="pv pv-particles"><span></span><span></span><span></span><span></span><span></span></div></div>`,
+        morph: `<div class="preview"><div class="pv pv-morph"><div class="morph"></div></div></div>`,
+        ripple: `<div class="preview"><div class="pv pv-ripple"><button class="ripple-btn">Click</button></div></div>`
+      };
+      return map[type] || map.glass;
+    }
+
+    function renderFilters() {
+      filters.innerHTML = categories.map(category => (
+        `<button class="chip ${category === activeCategory ? "active" : ""}" data-category="${category}">${category}</button>`
+      )).join("");
+    }
+
+    function filteredEffects() {
+      const term = search.value.trim().toLowerCase();
+      return effects.filter(effect => {
+        const categoryMatch = activeCategory === "Todas" || effect.category === activeCategory;
+        const textMatch = !term ||
+          effect.title.toLowerCase().includes(term) ||
+          effect.description.toLowerCase().includes(term) ||
+          effect.category.toLowerCase().includes(term) ||
+          effect.stack.toLowerCase().includes(term);
+        return categoryMatch && textMatch;
+      });
+    }
+
+    function render() {
+      const items = filteredEffects();
+      countTitle.textContent = `${items.length} efectos disponibles`;
+      grid.innerHTML = items.length ? items.map(effect => `
+        <article class="card">
+          ${preview(effect.type)}
+          <div class="card-body">
+            <div class="meta">
+              <span class="tag">${effect.category}</span>
+              <span class="stack">${effect.stack}</span>
+            </div>
+            <h3>${effect.title}</h3>
+            <p>${effect.description}</p>
+            <div class="actions">
+              <button class="btn primary" data-open="${effect.id}">Ver detalle</button>
+              <button class="btn" data-copy="${effect.id}">Copiar prompt</button>
+            </div>
+          </div>
+        </article>
+      `).join("") : `<div class="empty">No hay efectos con ese filtro.</div>`;
+    }
+
+    async function copyText(text, message = "Copiado") {
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        await navigator.clipboard.writeText(text);
+      } else {
+        const textarea = document.createElement("textarea");
+        textarea.value = text;
+        textarea.setAttribute("readonly", "");
+        textarea.style.position = "fixed";
+        textarea.style.opacity = "0";
+        document.body.appendChild(textarea);
+        textarea.select();
+        document.execCommand("copy");
+        textarea.remove();
+      }
+      toast.textContent = message;
+      toast.classList.add("show");
+      window.setTimeout(() => toast.classList.remove("show"), 1800);
+    }
+
+    function openModal(effect) {
+      currentEffect = effect;
+      modalPreview.innerHTML = preview(effect.type);
+      modalCategory.textContent = `${effect.category} · ${effect.stack}`;
+      modalTitle.textContent = effect.title;
+      modalDescription.textContent = effect.description;
+      modalPrompt.textContent = effect.prompt;
+      modal.classList.add("open");
+      modal.setAttribute("aria-hidden", "false");
+    }
+
+    function closeModal() {
+      modal.classList.remove("open");
+      modal.setAttribute("aria-hidden", "true");
+    }
+
+    filters.addEventListener("click", event => {
+      const button = event.target.closest("[data-category]");
+      if (!button) return;
+      activeCategory = button.dataset.category;
+      renderFilters();
+      render();
+    });
+
+    grid.addEventListener("click", event => {
+      const openId = event.target.closest("[data-open]")?.dataset.open;
+      const copyId = event.target.closest("[data-copy]")?.dataset.copy;
+      if (openId) openModal(effects.find(effect => effect.id === openId));
+      if (copyId) {
+        const effect = effects.find(item => item.id === copyId);
+        copyText(effect.prompt, `Prompt copiado: ${effect.title}`);
+      }
+    });
+
+    document.getElementById("copyBase").addEventListener("click", () => copyText(basePrompt, "Prompt base copiado"));
+    document.getElementById("copyStacked").addEventListener("click", () => {
+      const stacked = effects.find(effect => effect.id === "stacked");
+      copyText(stacked.prompt, "Prompt de cartas superpuestas copiado");
+    });
+    document.getElementById("copyPrompt").addEventListener("click", () => copyText(currentEffect.prompt, "Prompt copiado"));
+    document.getElementById("copyMaster").addEventListener("click", () => copyText(`${basePrompt}\n\nEfecto solicitado:\n${currentEffect.prompt}`, "Prompt maestro copiado"));
+    document.getElementById("closeModal").addEventListener("click", closeModal);
+    modal.addEventListener("click", event => { if (event.target === modal) closeModal(); });
+    document.addEventListener("keydown", event => { if (event.key === "Escape") closeModal(); });
+    search.addEventListener("input", render);
+
+    document.addEventListener("mousemove", event => {
+      document.querySelectorAll(".pv-spotlight").forEach(panel => {
+        const rect = panel.getBoundingClientRect();
+        const x = ((event.clientX - rect.left) / rect.width) * 100;
+        const y = ((event.clientY - rect.top) / rect.height) * 100;
+        panel.style.setProperty("--x", `${Math.max(0, Math.min(100, x))}%`);
+        panel.style.setProperty("--y", `${Math.max(0, Math.min(100, y))}%`);
+      });
+    });
+
+    renderFilters();
+    render();
+  </script>
+</body>
 </html>
